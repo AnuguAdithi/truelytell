@@ -1,0 +1,98 @@
+<% layout('layouts/boilerplate')%>
+	<!-- <h1>
+		Edit Movie Review
+	</h1>
+	<form action="/movies/<%=movie._id%>?_method=PUT" method="POST">
+		<div>
+			<label for="name">Movie Name</label>
+			<input type="text" id="name" name="movie[name]" value="<%=movie.name%>">
+		</div>
+		
+		<div>
+			<label for="url">Movie Image</label>
+			<input type="text" id="url" name="movie[image]" value="<%=movie.url%>">
+		</div>
+		
+		<div>
+			<label for="review">Movie Review</label>
+			<textarea id="review" name="movie[review]" ><%=movie.review%></textarea>
+			
+		</div>
+		
+		<button>
+			Update Review
+		</button>
+	</form> -->
+	<!-- <div>
+		<a href="/movies/<%=movie._id%>">Back to Movies</a>
+	</div> -->
+
+
+
+<div>
+	<h1 class="text-center">
+		Edit Movie
+	</h1>
+	<div class="col-6 offset-3">
+		<form action="/movies/<%=movie._id%>?_method=PUT" method="POST" novalidate class="validated-form">
+			<div class="mb-3">
+				<label class="form-label" for="name">Movie Name</label>
+				<input class="form-control" type="text" required id="name" name="movie[name]" value="<%=movie.name%>">
+			</div>
+
+			<div class="mb-3">
+				<label class="form-label" for="url">Movie Image</label>
+				<input class="form-control" type="text" required id="url" name="movie[image]" value="<%=movie.image%>">
+			</div>
+			<label for="floatingTextarea2">Review</label>
+			<div class="form-floating mb-3">
+				<textarea class="form-control" placeholder="Leave a review here" required id="floatingTextarea2"  style="height: 250px" name="movie[review]"><%=movie.review%></textarea>
+  				
+			</div>
+			
+		
+			<div class="mb-3">
+				<button class="btn btn-success">
+				Update Review
+				</button>
+			</div>
+			
+			
+		</form>
+	</div>
+</div>
+
+			
+			<!-- <div class="mb-3">
+				<label class="form-label" for="review">Movie Review</label>
+				<input class="form-control" id="review" name="movie[review]">
+			</div>
+			
+			<div class="form-floating mb-3">
+				<textarea class="form-control" placeholder="Leave a review here" id="floatingTextarea2"  style="height: 250px" name="movie[review]"><%=movie.review%></textarea>
+  				<label for="floatingTextarea2">Review</label>
+			</div>
+			
+			
+			
+			
+			<!-- <div>
+				<label for="review">Movie Review</label>
+				<textarea id="review" name="movie[review]"></textarea>
+
+			</div> -->
+
+			<!-- <div class="mb-3">
+				<button class="btn btn-info">
+				Update Movie
+				</button>
+			</div>
+		</form>
+	<div>
+		<a href="/movies/<%=movie._id%>">Back to Movies</a>
+	</div>
+
+	</div>
+</div> -->
+	 -->
+
