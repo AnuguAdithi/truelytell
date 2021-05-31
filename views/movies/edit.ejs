@@ -37,16 +37,16 @@
 		<form action="/movies/<%=movie._id%>?_method=PUT" method="POST" novalidate class="validated-form">
 			<div class="mb-3">
 				<label class="form-label" for="name">Movie Name</label>
-				<input class="form-control" type="text" required id="name" name="movie[name]" value="<%=movie.name%>">
+				<input class="form-control" type="text" required id="name" name="name" value="<%=movie.name%>">
 			</div>
 
 			<div class="mb-3">
 				<label class="form-label" for="url">Movie Image</label>
-				<input class="form-control" type="text" required id="url" name="movie[image]" value="<%=movie.image%>">
+				<input class="form-control" type="text" required id="url" name="image" value="<%=movie.image%>">
 			</div>
 			<label for="floatingTextarea2">Review</label>
 			<div class="form-floating mb-3">
-				<textarea class="form-control" placeholder="Leave a review here" required id="floatingTextarea2"  style="height: 250px" name="movie[review]"><%=movie.review%></textarea>
+				<textarea class="form-control" placeholder="Leave a review here" required id="floatingTextarea2"  style="height: 250px" name="review"><%=movie.review%></textarea>
   				
 			</div>
 			
@@ -79,7 +79,6 @@
 			<!-- <div>
 				<label for="review">Movie Review</label>
 				<textarea id="review" name="movie[review]"></textarea>
-
 			</div> -->
 
 			<!-- <div class="mb-3">
@@ -91,8 +90,6 @@
 	<div>
 		<a href="/movies/<%=movie._id%>">Back to Movies</a>
 	</div>
-
 	</div>
 </div> -->
 	 -->
-
