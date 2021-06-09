@@ -1,0 +1,29 @@
+<% layout('layouts/boilerplate')%>
+
+<div>
+	<h1 class="text-center">
+		Join Community
+	</h1>
+	<div class="col-6 offset-3">
+		<form action="/join" method="POST" novalidate class="validated-form" >
+			<div class="mb-3">
+				<label class="form-label" for="title">Community Title</label>
+				<input class="form-control" type="text" required id="title" name="title">
+			</div>
+			<div class="mb-3">
+				<label class="form-label" for="pass">Password</label>
+				<input class="form-control" type="password" required id="pass" name="password">
+			</div>
+			<!-- <label for="floatingTextarea2">Review</label> -->
+			<!-- <div class="form-floating mb-3">
+				<textarea class="form-control" placeholder="Leave a review here" required id="floatingTextarea2"  style="height: 250px" name="review"></textarea>
+  				
+			</div> -->
+			<div class="mb-3">
+				<button class="btn btn-success">
+				join community
+				</button>
+			</div>
+		</form>
+	</div>
+</div>

@@ -34,7 +34,7 @@
 		Edit Movie
 	</h1>
 	<div class="col-6 offset-3">
-		<form action="/movies/<%=movie._id%>?_method=PUT" method="POST" novalidate class="validated-form">
+		<form action="/movies/<%=communityId%>/<%=movie._id%>?_method=PUT" method="POST" novalidate class="validated-form">
 			<div class="mb-3">
 				<label class="form-label" for="name">Movie Name</label>
 				<input class="form-control" type="text" required id="name" name="name" value="<%=movie.name%>">

@@ -9,18 +9,20 @@
 			<h5 class="card-title"><%=movie.name%></h5>
 			<p class="card-text"><%=movie.review%></p>
 		  </div>
-		  <ul class="list-group list-group-flush">
-			<li class="list-group-item">An item</li>
-			<li class="list-group-item">A second item</li>
-			<li class="list-group-item">A third item</li>
-		  </ul>
+			<% if(check && movie.author._id.equals(check._id)) {%>  
 		  <div class="card-body">
-			  <a class="card-link btn btn-info" href="/movies/<%=movie._id%>/edit">Edit</a>
-			  <form class="d-inline" action="/movies/<%=movie._id%>?_method=DELETE" method="POST">
-			<button class="btn btn-danger">Delete</button>
-		</form> 
+			  <a class="card-link btn btn-info" href="/movies/<%=comId%>/<%=movie._id%>/edit">Edit</a>
+			  <form class="d-inline" action="/movies/<%=comId%>/<%=movie._id%>?_method=DELETE" method="POST">
+				  <button class="btn btn-danger">Delete</button>
+			  </form> 
 		  </div>
+			<% }%>
 			<div class="card-footer text-muted">
+				Submitted by <%=movie.author.username%>
+			</div> 
+			
+			<div class="card-footer text-muted">
+				
 				2 days ago
 			</div>
 			
@@ -63,7 +65,7 @@
 			<h2>
 			Leave a comment!!
 			</h2>
-		<form action="/movies/<%=movie._id%>/comments" method="POST"  class="mb-3 validated-form"  novalidate>
+		<form action="/movies/<%=comId%>/<%=movie._id%>/comments" method="POST"  class="mb-3 validated-form"  novalidate>
 			<div class="mb-3">
 				<label class="form-label" for="rating">Rating</label>
 				<input class="form-range" type="range" min="1" max="5" name="rating" id="rating">
@@ -83,16 +85,22 @@
 				<h5 class="card-title">
 					Rating: <%= comment.rating%>
 				</h5>
+				<p class="card-subtitle mb-2 text-muted">
+					Submitted by:
+					<%=comment.author.username%>
+				</p>
 				<p class="card-text">
 					Comment:
 					<%=comment.body%>
 				</p>
-				<form action="/movies/<%=movie._id%>/comments/<%=comment._id%>?_method=DELETE" method="POST">
+				 <% if(check && comment.author._id.equals(check._id)) {%>  
+				
+				<form action="/movies/<%=comId%>/<%=movie._id%>/comments/<%=comment._id%>?_method=DELETE" method="POST">
 				<button class="btn btn-sm btn-danger">
 					Delete
 					</button>
 				</form>
-
+				<%}%>
 			</div>
 		</div>
 		<%}%>

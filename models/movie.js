@@ -7,6 +7,11 @@ const movieSchema = new Schema({
 	name:String,
 	image:String,
 	review:String,
+	author:{
+		type:Schema.Types.ObjectId,
+		ref:'User'
+	},
+	
 	comments:[
 		{
 			type:Schema.Types.ObjectId,
@@ -25,7 +30,5 @@ movieSchema.post('findOneAndDelete',async function(doc){
 		})
 	}
 })
-
-
 
 module.exports = mongoose.model('movie',movieSchema);

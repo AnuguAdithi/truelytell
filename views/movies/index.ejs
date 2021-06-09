@@ -3,11 +3,12 @@
 <h1>
 	All movies
 </h1>
-<div>
-	<a href="/movies/new">Add Movie Reviews</a>
-</div>
 
-<% for(let movie of movies){%>
+<a href="/movies/new/<%=community._id%>" type="button" class="btn btn-warning">new Movie</a>
+
+
+
+<% for(let movie of community.moviePosts){%>
 <div class="card" mb-3>
 	<div class="row">
 		<div class="col-md-4">
@@ -21,10 +22,7 @@
 				<p class="card-text">
 					<%=movie.review%>
 				</p>
-				<!-- <p class="card-text">
-					<small class="text-muted"><%=movie.location%></small>
-				</p> -->
-				<a class="btn btn-primary" href="/movies/<%=movie._id%>" >View <%=movie.name %></a>
+				<a class="btn btn-primary" href="/movies/post/<%=movie._id%>/<%=community._id%>" >View <%=movie.name %></a>
 				
 			</div>
 			
