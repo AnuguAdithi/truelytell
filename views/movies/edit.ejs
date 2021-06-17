@@ -26,14 +26,17 @@
 	<!-- <div>
 		<a href="/movies/<%=movie._id%>">Back to Movies</a>
 	</div> -->
-
-
-
-<div>
-	<h1 class="text-center">
+<a href="/movies/new/<%=communityId%>" type="button" class="btn btn-warning mb-4 mt-0">new Movie</a>
+<a href="/movies/request/<%=communityId%>" type="button" class="btn btn-warning mb-4 mt-0">Request</a>
+	<a class="btn btn-warning mb-4 mt-0" href="/movies/post/<%=movie._id%>/<%=communityId%>" >View <%=movie.name %></a>
+<a type="button" href="/movies/<%=communityId%>"  class="btn btn-warning mb-4 mt-0">All Movies</a>
+<center>
+<div class="text-center mb-4" style="color:black; border-radius: 2px;padding: 5px;width: 50%;height=50%;box-shadow: 2px 4px 2px 4px #999999;">
+	<h1 >
 		Edit Movie
 	</h1>
-	<div class="col-6 offset-3">
+	
+	<div class="col-10 offset-1">
 		<form action="/movies/<%=communityId%>/<%=movie._id%>?_method=PUT" method="POST" novalidate class="validated-form">
 			<div class="mb-3">
 				<label class="form-label" for="name">Movie Name</label>
@@ -61,6 +64,7 @@
 		</form>
 	</div>
 </div>
+	</center>
 
 			
 			<!-- <div class="mb-3">

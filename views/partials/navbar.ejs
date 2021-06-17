@@ -1,20 +1,30 @@
 <nav class="navbar sticky-top navbar-expand-lg navbar-dark bg-dark">
   <div class="container-fluid">
-    <a class="navbar-brand" href="#">truelytell</a>
+    <a class="navbar-brand" href="#" style="font-size:2em">truelytell</a>
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
       <span class="navbar-toggler-icon"></span>
     </button>
     <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
       <div class="navbar-nav">
-        <a class="nav-link "  href="/">Home</a>
-        <a class="nav-link" href="/movies">Movies</a>
-        <a class="nav-link" href="/movies/new">New Movie</a>
-		 <!-- <a class="nav-link" href="/register">Register</a> -->
-		<!-- <a class="nav-link" href="/login">Login</a> -->
-		  <a class="nav-link" href="/logout">Logout</a>
-		  
-		  
-      </div>
-    </div>
-  </div>
+        <a class="nav-link "  href="/"  style="font-size:1.25em">Home</a>
+        <!-- <a class="nav-link" href="/movies"  style="font-size:1.25em">Movies</a> -->
+        <!-- <a class="nav-link" href="/movies/new" style="font-size:1.25em">New Movie</a> -->
+		   
+		</div>
+	  </div>
+	</div>
+	<div class="collapse navbar-collapse " id="navbarNavAltMarkup">
+		<!-- ml-auto still works just fine-->
+		<div class="navbar-nav ml-auto">
+			<%if(!user){%>
+			<a class="nav-link active" aria-current="page" href="/login" style="margin-right:5px;font-size:1.25em">login</a>
+			 <a class="nav-link active" aria-current="page" href="/register" style="margin-right:5px;font-size:1.25em">register</a> 
+			<%}%>	
+			 
+			<%if(user){%>
+			<a class="nav-link active" aria-current="page" href="/logout" style="margin-right:5px;font-size:1.25em">logout</a>
+			<%}%>			
+			<!-- <a class="nav-link disabled" href="#" tabindex="-1" aria-disabled="true">Disabled</a> -->
+		</div>
+	</div>
 </nav>

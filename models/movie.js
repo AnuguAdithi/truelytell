@@ -7,6 +7,7 @@ const movieSchema = new Schema({
 	name:String,
 	image:String,
 	review:String,
+	date : Date,
 	author:{
 		type:Schema.Types.ObjectId,
 		ref:'User'

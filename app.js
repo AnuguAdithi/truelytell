@@ -16,6 +16,9 @@ const Movie = require('./models/movie');
 const User = require('./models/user');
 const Comment = require('./models/comment');
 const Community = require('./models/community');
+const Request = require('./models/request');
+var moment = require('moment');
+
 
 // for authentication
 const passport = require('passport');
@@ -100,10 +103,86 @@ app.use(passport.session());
 passport.use(new LocalStatergy(User.authenticate()));
 //getting the user into and out
 passport.serializeUser(User.serializeUser());
+
 passport.deserializeUser(User.deserializeUser());
 
 
 
+
+// app.use(function (req, res, next) {
+// 	res.locals.currentUser = req.user;
+// 	res.locals.moment = require('moment');
+// 	next();
+// });
+
+
+
+
+
+
+app.use(async function(req,res,next) {
+	// if(req.user)
+	// {
+	// 	res.locals.user = req.user;
+	// 	console.log(req.user._id);
+	// 	const user = await User.findById(req.user._id).populate({
+	// 		path: 'requests'
+	// 	}).populate('author');
+	// 	console.log(user[0]);
+	// 	next();
+	// 	}
+	// else
+	// {
+	
+	
+	// const findMovie = await Movie.findById(req.params.id).populate({
+	// 	path: 'comments',
+	// 	populate: {
+	// 		path: 'author'
+	// 	}
+	// }).populate('author');
+	
+	
+	
+	if(req.user)
+	{
+		// await User
+		// .findById( req.user._id )
+		// .populate("requests") 						// key to populate
+		// .then(user => {
+		// 	console.log(user);
+		// res.locals.user = req.user;
+   // });
+		User.findById(req.user._id).
+	populate({
+		path : 'requests',
+	}).exec(function(err,comm){
+			if(err) 
+				res.send(err);
+			else{
+				// console.log(comm);
+				res.locals.user = comm;
+				res.locals.currentUser = req.user;
+	res.locals.moment = require('moment');
+				next();
+		}
+	});
+	// }
+	}
+	else{
+		res.locals.user = await User.find({
+			username : 'default'
+		})[0];
+		// console.log(req.user);
+		
+		// res.user = req.user;
+		res.locals.currentUser = req.user;
+	res.locals.moment = require('moment');
+	
+		next();
+		// res.re('/register');
+	}
+});
 
 app.get('/',isLoggedIn,async(req,res)=>{
 	
@@ -135,14 +214,10 @@ app.get('/',isLoggedIn,async(req,res)=>{
 		if(err) res.send(err);
 		else{
 			// console.log(comm)
-			res.render('home',{user:req.user,community:comm});
+			// res.locals.comm = comm;
+			res.render('home',{community:comm});
 		}
 	});
-	
-	
-	
-	
-	
 });
 
 // app.get('/fakeUser',async(req,res)=>{
@@ -196,7 +271,6 @@ app.post('/login', passport.authenticate("local", {
     failureRedirect: '/register'
 }), (req, res) => { })
 
-
 function isLoggedIn(req, res, next) {
     if (req.isAuthenticated()) {
         return next()
@@ -208,8 +282,169 @@ app.get('/movies/new/:comId',isLoggedIn,catchAsync(async(req,res,next)=>{
 	res.render('movies/new',{communityId:req.params.comId});                    //new movie changed
 }));
 
-app.get('/movies/:comId',isLoggedIn,catchAsync(async(req,res,next)=>{  
+//request routes
+app.get('/movies/request/:comId',isLoggedIn,catchAsync(async(req,res,next)=>{
+	res.render('movies/request',{communityId:req.params.comId});   
+}));
+
+app.post('/movies/request/:comId',isLoggedIn,catchAsync(async(req,res,next)=>{
+	const community = await Community.findById(req.params.comId);
+	
+		const request = new Request({
+		title : req.body.title,
+		author : req.user._id,
+		group : req.params.comId
+		// date :
+		});
+	
+	
+	// console.log(community);
+	const com = await Community.findById(community._id).populate({
+		path : 'moviePosts',
+		// populate:{
+		// 	path:'name'
+		// }
+	}).populate('author');
+	console.log(com);
+	for(let post of com.moviePosts)
+	{
+		if(post.name == request.title)
+		{
+			res.redirect(`/movies/post/${post._id}/${req.params.comId}`)
+		}
+	}
+	
+		await request.save(); 
+	// console.log(req.body.title);
+
+	for(let id of community.users)
+	{
+		if(req.user._id != id)
+		{
+		
+			const user = await User.findById(id);
+			user.requests.push(request);
+			await user.save();
+			// console.log(user);
+		}
+	}
+	if(req.user._id != community.author._id)
+	{
+		const user = await User.findById( community.author._id);
+		user.requests.push(request);
+		await user.save();
+		// console.log(user);
+	}
+		
+	// console.log(req.user);
+	res.redirect(`/movies/${req.params.comId}`);
+}));
+
+////////////delete request
+
+app.delete('/movies/:comId/request/:reqId',isLoggedIn,catchAsync(async(req,res)=>{
+	
+	
+// 	const {id,commentId} = req.params;
+// 	const commenT = await Comment.findById(commentId);
+// 	if(!commenT.author._id.equals(req.user._id)) throw new ExpressError('You need permissions to do that',400);
+	
+// 	// const {id1} = req.params.commentId;
+// 	const comment = await Comment.findById(commentId);
+// 	if(!comment.author._id.equals(req.user._id)) throw new ExpressError('You need permissions to do that',400);
+	
+// 	// const {id,commentId} = req.params;
+// 	await Movie.findByIdAndUpdate(id,{$pull: {comments: commentId}});
+// 	await Comment.findByIdAndDelete(commentId);
+// 	await Community.findByIdAndUpdate(req.params.comId,{moviePosts:req.params.id});
+// 	res.redirect(`/movies/post/${req.params.id}/${req.params.comId}`);
+// 	// res.send("Delete Me!!");
+	
+	
+	
+	// console.log(req.user);
+	const {comId,reqId} = req.params;
+	const request = await Request.findById(reqId);
+	
+
+	await User.findByIdAndUpdate(req.user._id,{$pull: {requests: reqId}});
+	// await Request.findByIdAndDelete(reqId);
+	// console.log(req.user,request);
+	res.redirect(`/movies/${comId}`);
+	
+}));
+
+
+
+app.get('/movies/:comId',isLoggedIn,catchAsync(async(req,res,next)=>{
+	
+	// const movieName = req.body.title;
+	// console.log(req.body.title);
 	const movies = await Movie.find({});
+	
+	
+	const findMovie = await Movie.find({}).populate({
+		path: 'comments',
+		populate: {
+			path: 'author',
+		}
+	}).populate('author');
+	// console.log(findMovie);
+	
+	// if(movieName)
+	// {
+	// 	movies = await Movie.find({
+	// 		name:movieName                                                                   // TO BE CHANGED
+	// 	});
+	// 	// console.log(movies);
+	// }
+	// console.log(movieName,movies);
+	
+	const users = await User.find({});
+	// console.log("index page!!");
+	Community.findById(req.params.comId).
+	populate({
+		path : 'moviePosts',
+		// path : 'users'
+	}).
+	populate({
+		path : 'users'
+	}).exec(function(err,comm){
+		if(err) res.send(err);
+		else
+		{
+			Community.find({})
+			.populate('author')
+				.exec(function(err,comm1){
+				if(err) res.send(err);
+				else{
+					// console.log(comm.users);
+					res.render('movies/index',{community:comm,comm:comm1,userr:req.user,users,movies});
+				}
+			});
+			// res.render('movies/index',{movies,community:comm});           //changed
+		}
+	})
+}));
+
+
+
+app.post('/movies/:comId/search',isLoggedIn,catchAsync(async(req,res,next)=>{
+	
+	const movieName = req.body.title;
+	// console.log(req.body.title);
+	let movies = await Movie.find({});
+	if(movieName)
+	{
+		movies = await Movie.find({
+			name:movieName
+		});
+		// console.log(movies);
+	}
+	// console.log(movieName,movies);
+	
+	const users = await User.find({});
+	// console.log("index page!!");
 	Community.findById(req.params.comId).
 	populate({
 		path : 'moviePosts'
@@ -217,11 +452,20 @@ app.get('/movies/:comId',isLoggedIn,catchAsync(async(req,res,next)=>{
 		if(err) res.send(err);
 		else
 		{
-			res.render('movies/index',{movies,community:comm});           //changed
+			Community.find({})
+			.populate('author')
+				.exec(function(err,comm1){
+				if(err) res.send(err);
+				else{
+					// console.log(movies);
+					res.render('movies/index',{community:comm,comm:comm1,userr:req.user,users,movies});
+				}
+			});
+			// res.render('movies/index',{movies,community:comm});           //changed
 		}
 	})
-	
 }));
+
 
 app.get('/create',isLoggedIn,catchAsync(async(req,res,next)=>{
 	// res.send(User);
@@ -256,6 +500,7 @@ app.post('/create',isLoggedIn,catchAsync(async(req,res,next)=>{
 	// console.log(community,req.user);
 	res.redirect(`/`);
 }));
+
 //leaving a community
 app.delete('/community/:id/:userId',isLoggedIn,catchAsync(async(req,res)=>{
 	const{id,userId}=req.params;
@@ -266,7 +511,7 @@ app.delete('/community/:id/:userId',isLoggedIn,catchAsync(async(req,res)=>{
 	const def = await User.find({
 	username : 'default'
 });
-	console.log(def[0]._id) ;
+	// console.log(def[0]._id) ;
 	if(userId == com.author._id)
 	{
 		await Community.findByIdAndUpdate(id,{author:def[0]._id});
@@ -298,7 +543,7 @@ app.delete('/community/:id',isLoggedIn,catchAsync(async(req,res)=>{
 }));
 
 
-
+//movie - post route
 
 app.post('/movies/:comId',isLoggedIn,catchAsync(async(req,res,next)=>{
 	
@@ -319,11 +564,42 @@ app.post('/movies/:comId',isLoggedIn,catchAsync(async(req,res,next)=>{
 	name : req.body.name,
 	image : req.body.image,
 	review : req.body.review,
-	author: req.user._id
+	author: req.user._id,
+	date: new Date()
 	});
+	// console.log(movie,movie.date);
 	const com = await Community.findById(req.params.comId);
-	console.log(com);
 	com.moviePosts.push(movie);    // changed post movie
+	
+	
+	const request = await Request.find().populate({
+		path: 'groups',
+		populate:{
+			path: 'title'
+		}
+	});
+	
+	const community = await Community.findById(com._id).populate({
+		path : 'users',
+	}).populate('author');
+	
+	// console.log(community.users,community);
+	for(let req of request)
+	{
+		// console.log(req.title,movie.name,req.title==(movie.name),req.group,com._id,req.group.equals(com._id));
+		if(req.title == movie.name && req.group.equals(com._id))
+		{
+			// console.log(req._id);
+			await Request.findByIdAndDelete(req._id);
+			// console.log(request);
+			for(let delUser of community.users)
+			{
+				await User.findByIdAndUpdate(delUser._id,{$pull: {requests: req._id}});
+			}
+			await User.findByIdAndUpdate(community.author._id,{$pull: {requests: req._id}});
+			break;
+		}
+	}
 	
 	await movie.save();
 	await com.save();
@@ -335,13 +611,13 @@ app.get('/movies/post/:id/:comId',isLoggedIn,catchAsync(async(req,res,next)=>{
 	const findMovie = await Movie.findById(req.params.id).populate({
 		path: 'comments',
 		populate: {
-			path: 'author'
+			path: 'author',
 		}
 	}).populate('author');
 	// console.log(findMovie);
 	// console.log(findMovie);
-	
-	res.render('movies/show',{movie:findMovie,check:req.user,comId : req.params.comId});
+	// console.log("required page!!!!!");                    ////////required page!!!!!!!!!!!!!!!!1
+	res.render('movies/show',{movie:findMovie,comId : req.params.comId}); //check ->user
 }));
 
 app.get('/movies/:comId/:id/edit',isLoggedIn,catchAsync(async(req,res,next)=>{
@@ -402,7 +678,8 @@ app.post('/movies/:comId/:id/comments',isLoggedIn,catchAsync(async(req,res)=>{
 	const comment = new Comment({
 		body : req.body.body,
 		rating : req.body.rating,
-		author : req.user._id
+		author : req.user._id,
+		date: new Date()
 	});
 	
 	movie.comments.push(comment);
@@ -418,7 +695,7 @@ app.post('/movies/:comId/:id/comments',isLoggedIn,catchAsync(async(req,res)=>{
 	await Community.findByIdAndUpdate(req.params.comId,{moviePosts:req.params.id});
 	// console.log(movie);
 	const com =await Community.findById(req.params.comId);
-	console.log(com[0],com);
+	// console.log(com[0],com);
 
 	// res.redirect(`/movies/${movie._id}`);
 	res.redirect(`/movies/post/${req.params.id}/${req.params.comId}`);
