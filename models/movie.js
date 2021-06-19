@@ -6,6 +6,11 @@ const Schema = mongoose.Schema;
 const movieSchema = new Schema({
 	name:String,
 	image:String,
+	// image:
+	// {
+	// data: Buffer,
+	// contentType: String
+	// },
 	review:String,
 	date : Date,
 	author:{
@@ -21,15 +26,15 @@ const movieSchema = new Schema({
 	]
 });
 
-movieSchema.post('findOneAndDelete',async function(doc){
-	// console.log("you reached!!")
-	if(doc){
-		await Comment.remove({
-			_id:{
-				$in: doc.comments
-			}
-		})
-	}
-})
+// movieSchema.post('findOneAndDelete',async function(doc){
+// 	// console.log("you reached!!")
+// 	if(doc){
+// 		await Comment.remove({
+// 			_id:{
+// 				$in: doc.comments
+// 			}
+// 		})
+// 	}
+// })
 
 module.exports = mongoose.model('movie',movieSchema);

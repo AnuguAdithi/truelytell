@@ -1,34 +1,99 @@
-<% layout('layouts/boilerplate')%>
-<style>
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>truelytell!!!</title>
+	
+	<link rel="preconnect" href="https://fonts.gstatic.com">
+<link href="https://fonts.googleapis.com/css2?family=Lobster&display=swap" rel="stylesheet">
+
+	
+	
+	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/5.0.0-alpha1/css/bootstrap.min.css" integrity="sha384-r4NyP46KrjDleawBgD5tp8Y7UzmLA05oM1iAEQ17CSuDqnUK2+k9luXQOfXJCJ4I" crossorigin="anonymous">
+	<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-eOJMYsd53ii+scO/bJGFsiCZc+5NDVN2yr8+0RDqr0Ql0h+rP48ckxlpbzKgwra6" crossorigin="anonymous">
+	
+	<style>
 		body
 		{
-			background-image: url("data:image/jpeg;base64,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");
+			/* background-image: url("data:image/jpeg;base64,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"); */
+			background: linear-gradient(to right, #f7797d, #FBD786, #C6FFDD); 
 			height: 100%; 
 			background-position: center;
 			background-repeat: no-repeat;
 			background-size: cover;
-			background-color:pink;
+		
 		}
 </style>
-
-<div>
-	<marquee behavior="alternate" direction = "right" >--Request for a review or share a review--</marquee>
-	<h1 class="text-center">
+	
+</head>
+	
+<body class="d-flex flex-column vh-100">
+	
+	<!-- <nav class="navbar sticky-top navbar-expand-lg navbar-dark bg-dark">
+		  <div class="container-fluid">
+			<a class="navbar-brand " href="#">truelytell</a>
+			  
+			  
+			  
+			<button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
+			  <span class="navbar-toggler-icon"></span>
+			</button>
+			  
+			  
+			<div class="collapse navbar-collapse" id="navbarNavAltMarkup">
+			  <div class="navbar-nav">
+				  <a class="nav-link" href="/register">Register</a>
+				  <a class="nav-link" href="/login">Login</a>
+				  <a class="nav-link" href="/logout">Logout</a>
+				  
+			  </div>
+			</div>
+			  <form class="d-flex">
+        <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
+        <button class="btn btn-outline-success" type="submit">Search</button>
+      </form>
+		  </div>
+		</nav> -->
+	
+	<!-- <nav class="navbar navbar-expand-sm bg-dark justify-content-center"> -->
+	<nav class="navbar navbar-expand-sm navbar-dark bg-dark">
+	  <div class="container-fluid">
+		 <a class="navbar-brand" style="text-align:center; font-size:4em;font-family: 'Lobster', cursive; " href="#">truelytell</a>
+		 
+		
+		<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
+				<span class="navbar-toggler-icon"></span>
+			</button>
+		<div class="collapse navbar-collapse " id="navbarNavAltMarkup">
+		  <!-- ml-auto still works just fine-->
+		  <div class="navbar-nav ml-auto">
+			<a class="nav-link active" aria-current="page" href="/login" style="margin-right:5px;font-size:1.25em">login</a>
+			<!-- <a class="nav-link active" aria-current="page" href="/register" style="margin-right:5px;font-size:1.25em">register</a> -->
+			<!-- <a class="nav-link disabled" href="#" tabindex="-1" aria-disabled="true">Disabled</a> -->
+			</div>
+		</div>
+	  </div>
+		
+	</nav>
+	<center>
+	<main class="container">
+		<marquee behavior="alternate" direction = "right" ><h5>--Register in to request for a review or share a review--</h5></marquee>
+		<div>
+			<div class="text-center" style="color:white;background-color:black; border-radius: 2px;padding: 5px;width: 50%;height=50%;box-shadow: 2px 4px 2px 4px #999999;margin-top:2%">
+				<h1 class="text-center">
 		Register
 	</h1>
+			
 	<div class="col-6 offset-3">
 		<form action="/register" method="POST" novalidate class="validated-form" >
 			<div class="mb-3">
-				<label class="form-label" for="name">User Name</label>
-				<input class="form-control" type="text" required id="name" name="username">
+				<label class="form-label" for="name">Email</label>
+				<input class="form-control" type="email" required id="name" name="username">
 			</div>
-
-			<!-- <div class="mb-3">
-				<label class="form-label" for="url">Email</label>
-				<input class="form-control" type="email" required id="email" name="user[email]">
-			</div> -->
-			
-			
 			 <div class="mb-3">
 				<label class="form-label" for="review">Password</label>
 				<input class="form-control" type="password" id="password" name="password">
@@ -44,6 +109,45 @@
 
 
 	</div>
+			</div>
 </div>
+		
 
+	</main>
+		</center>
+
+	  <%- include('./partials/footer')%>
+	
+	<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.1/dist/umd/popper.min.js" integrity="sha384-SR1sx49pcuLnqZUnnPwx6FCym0wLsk5JZuNx2bPPENzswTNFaQU1RDvt3wT4gWFG" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/js/bootstrap.min.js" integrity="sha384-j0CNLUeiqtyaRmlzUHCPZ+Gy5fQu0dQ6eZ/xAww941Ai1SxSY+0EQqNXNE6DZiVc" crossorigin="anonymous"></script>
+    
+	<script>
+
+(function () {
+  'use strict'
+
+  // Fetch all the forms we want to apply custom Bootstrap validation styles to
+  var forms = document.querySelectorAll('.validated-form')
+
+  // Loop over them and prevent submission
+  Array.from(forms) //-new version           // Array.prototype.slice.call(forms) - older version
+    .forEach(function (form) {
+      form.addEventListener('submit', function (event) {
+        if (!form.checkValidity()) {
+          event.preventDefault()
+          event.stopPropagation()
+        }
+
+        form.classList.add('was-validated')
+      }, false)
+    })
+})()
+
+	
+</script>
+	
+	
+	
+</body>
+</html>
 

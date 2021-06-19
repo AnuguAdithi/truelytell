@@ -1,14 +1,27 @@
 <% layout('layouts/boilerplate')%>
+<style>
 
-<a href="/movies/request/<%=communityId%>" type="button" class="btn btn-warning mb-4 mt-0">Request</a>
-<a type="button" href="/movies/<%=communityId%>"  class="btn btn-warning mb-4 mt-0">All Movies</a>
+
+body
+		{
+		
+			background: linear-gradient(to right, #f7797d, #FBD786, #C6FFDD); 
+			height: 100%; 
+			background-position: center;
+			background-repeat: no-repeat;
+			background-size: cover;
+	}
+</style>
+
+<a href="/movies/request/<%=communityId%>" type="button" class="btn btn-success">Request</a>
+<a type="button" href="/movies/<%=communityId%>"  class="btn btn-success ">All Movies</a>
 <center>
-<div class="text-center mb-4" style="background-color:cadetblue; border-radius: 2px;padding: 5px;width: 50%;height=50%;box-shadow: 2px 4px 2px 4px #999999;">
+<div class="text-center" style="border-radius: 2px;width: 50%;height=50%;box-shadow: 2px 4px 2px 4px #999999; color:white;background-color:#2E2E2E">
 	<h1 class="text-center">
 		New Movie
 	</h1>
-	<div class="col-10 offset-1">
-		<form action="/movies/<%=communityId%>" method="POST" novalidate class="validated-form" >
+	<div class="col-10 offset-1" >
+		<form action="/movies/<%=communityId%>" method="POST" novalidate class="validated-form"  >
 			<div class="mb-3">
 				<label class="form-label" for="name">Movie Name</label>
 				<input class="form-control" type="text" required id="name" name="name">
@@ -18,12 +31,18 @@
 				<label class="form-label" for="url">Movie Image</label>
 				<input class="form-control" type="text" required id="url" name="image">
 			</div>
+			
+			<!-- <div class="mb-3">
+				<label class="form-label" for="url">Movie Image</label>
+				<input type="file" id="img" name="image" accept="image/*">
+			</div> -->
+
 			<label for="floatingTextarea2">Review</label>
 			<div class="form-floating mb-3">
-				<textarea class="form-control" placeholder="Leave a review here" required id="floatingTextarea2"  style="height: 250px" name="review"></textarea>
+				<textarea class="form-control" placeholder="Leave a review here" required id="floatingTextarea2"  style="height: 200px" name="review"></textarea>
   				
 			</div>
-			<div class="mb-3">
+			<div class="pb-3">
 				<button class="btn btn-success">
 				Add Movie
 				</button>

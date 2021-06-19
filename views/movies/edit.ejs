@@ -26,12 +26,35 @@
 	<!-- <div>
 		<a href="/movies/<%=movie._id%>">Back to Movies</a>
 	</div> -->
-<a href="/movies/new/<%=communityId%>" type="button" class="btn btn-warning mb-4 mt-0">new Movie</a>
-<a href="/movies/request/<%=communityId%>" type="button" class="btn btn-warning mb-4 mt-0">Request</a>
-	<a class="btn btn-warning mb-4 mt-0" href="/movies/post/<%=movie._id%>/<%=communityId%>" >View <%=movie.name %></a>
-<a type="button" href="/movies/<%=communityId%>"  class="btn btn-warning mb-4 mt-0">All Movies</a>
+
+
+
+
+
+<style>
+
+
+body
+		{
+		
+			background: linear-gradient(to right, #f7797d, #FBD786, #C6FFDD); 
+			height: 100%; 
+			background-position: center;
+			background-repeat: no-repeat;
+			background-size: cover;
+	}
+</style>
+
+
+
+
+
+<a href="/movies/new/<%=communityId%>" type="button" class="btn btn-success mb-4 mt-0">new Movie</a>
+<a href="/movies/request/<%=communityId%>" type="button" class="btn btn-success mb-4 mt-0">Request</a>
+	<a class="btn btn-success mb-4 mt-0" href="/movies/post/<%=movie._id%>/<%=communityId%>" >View <%=movie.name %></a>
+<a type="button" href="/movies/<%=communityId%>"  class="btn btn-success mb-4 mt-0">All Movies</a>
 <center>
-<div class="text-center mb-4" style="color:black; border-radius: 2px;padding: 5px;width: 50%;height=50%;box-shadow: 2px 4px 2px 4px #999999;">
+<div class="text-center mb-4" style="color:black; border-radius: 2px;padding: 5px;width: 50%;height=50%;box-shadow: 2px 4px 2px 4px #999999;color:white;background-color:#2E2E2E">
 	<h1 >
 		Edit Movie
 	</h1>
@@ -49,12 +72,12 @@
 			</div>
 			<label for="floatingTextarea2">Review</label>
 			<div class="form-floating mb-3">
-				<textarea class="form-control" placeholder="Leave a review here" required id="floatingTextarea2"  style="height: 250px" name="review"><%=movie.review%></textarea>
+				<textarea class="form-control" placeholder="Leave a review here" required id="floatingTextarea2"  style="height: 200px" name="review"><%=movie.review%></textarea>
   				
 			</div>
 			
 		
-			<div class="mb-3">
+			<div class="pb-3">
 				<button class="btn btn-success">
 				Update Review
 				</button>

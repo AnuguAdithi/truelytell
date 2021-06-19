@@ -284,7 +284,29 @@ app.get('/movies/new/:comId',isLoggedIn,catchAsync(async(req,res,next)=>{
 
 //request routes
 app.get('/movies/request/:comId',isLoggedIn,catchAsync(async(req,res,next)=>{
-	res.render('movies/request',{communityId:req.params.comId});   
+	
+	
+	Community.findById(req.params.comId).
+	populate({
+		path : 'users'
+	}).exec(function(err,comm){
+		if(err) res.send(err);
+		else
+		{
+			Community.find({})
+			.populate('author')
+				.exec(function(err,comm1){
+				if(err) res.send(err);
+				else{
+					res.render('movies/request',{community:comm,comm:comm1,communityId:req.params.comId,userr:req.user});
+				 }
+			});
+			// res.render('movies/index',{movies,community:comm});           //changed
+		}
+	});
+	
+	
+	// res.render('movies/request',{communityId:req.params.comId});   
 }));
 
 app.post('/movies/request/:comId',isLoggedIn,catchAsync(async(req,res,next)=>{
@@ -431,7 +453,7 @@ app.get('/movies/:comId',isLoggedIn,catchAsync(async(req,res,next)=>{
 
 app.post('/movies/:comId/search',isLoggedIn,catchAsync(async(req,res,next)=>{
 	
-	const movieName = req.body.title;
+	const movieName = req.body.title.trim();
 	// console.log(req.body.title);
 	let movies = await Movie.find({});
 	if(movieName)
@@ -442,12 +464,17 @@ app.post('/movies/:comId/search',isLoggedIn,catchAsync(async(req,res,next)=>{
 		// console.log(movies);
 	}
 	// console.log(movieName,movies);
-	
+	// if(movies.length!=0)
+	// {
+		// console.log(movies,movies.length);
 	const users = await User.find({});
 	// console.log("index page!!");
 	Community.findById(req.params.comId).
 	populate({
 		path : 'moviePosts'
+	}).
+	populate({
+		path : 'users'
 	}).exec(function(err,comm){
 		if(err) res.send(err);
 		else
@@ -457,13 +484,16 @@ app.post('/movies/:comId/search',isLoggedIn,catchAsync(async(req,res,next)=>{
 				.exec(function(err,comm1){
 				if(err) res.send(err);
 				else{
-					// console.log(movies);
 					res.render('movies/index',{community:comm,comm:comm1,userr:req.user,users,movies});
 				}
 			});
 			// res.render('movies/index',{movies,community:comm});           //changed
 		}
 	})
+	// }
+	// else{
+		// res.send("No movies!!!");
+	// }
 }));
 
 
@@ -558,16 +588,16 @@ app.post('/movies/:comId',isLoggedIn,catchAsync(async(req,res,next)=>{
 	// const result = movieSchema.validate(req.body);
 	// console.log(result);
 	
-	// console.log(req.body);
+	console.log(req.body.image);
 	
 	const movie = new Movie({
-	name : req.body.name,
+	name : req.body.name.trim(),
 	image : req.body.image,
 	review : req.body.review,
 	author: req.user._id,
 	date: new Date()
 	});
-	// console.log(movie,movie.date);
+	console.log(movie.image);
 	const com = await Community.findById(req.params.comId);
 	com.moviePosts.push(movie);    // changed post movie
 	

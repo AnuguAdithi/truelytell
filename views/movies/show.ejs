@@ -1,17 +1,76 @@
  <% layout('layouts/boilerplate')%>
+
+<style>
+/* width */
+::-webkit-scrollbar {
+  width: 20px;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+  box-shadow: inset 0 0 5px grey; 
+  border-radius: 10px;
+}
+ 
+/* Handle */
+::-webkit-scrollbar-thumb {
+  background: #3E3E3E; 
+  border-radius: 10px;
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+  background: #b30000; 
+}
+</style>
+
+
+
+<style>
+
+
+ body
+		{
+		
+			background: #2E2E2E;
+			color:white;
+			height: 100%; 
+			background-position: center;
+			background-repeat: no-repeat;
+			background-size: cover;
+	} 
+
+	
+	#scroll{
+    direction:rtl; 
+    overflow:auto; 
+	overflow-y:scroll;
+	overflow-x:hidden;
+		height:520px;
+								
+	}
+   
+
+#scroll div{
+    direction:ltr;
+}
+</style>
+
 <link rel="stylesheet" href="/stylesheets/stars.css">
 <a href="/movies/new/<%=comId%>" type="button" class="btn btn-warning mb-4 mt-0">new Movie</a>
 <a href="/movies/request/<%=comId%>" type="button" class="btn btn-warning mb-4 mt-0">Request</a>
 <a type="button" href="/movies/<%=comId%>"  class="btn btn-warning mb-4 mt-0">All Movies</a>
-	 <div class="row">
-	<div class="col-8 ">
-		<div class="card mb-3">
+	 <div class="row"id="scroll"  >
+	<div class="col-8 "  style="height=100px;padding:0px">
+		<div class="card mb-3"  style=" border:1px solid black;background: linear-gradient(to right, #f7797d, #FBD786, #C6FFDD);">
 			<center>
-		  <img src='<%=movie.image%>' class="card-img-top mt-3" alt="image" style=" border-radius: 2px;padding: 5px;width: 50%;height=50%;box-shadow: 2px 4px 2px 4px #999999;">
+		  <img src='<%=movie.image%>' class="card-img-top mt-3" alt="image" style=" border-radius: 2px;padding: 5px;width: 40%;height=50%;box-shadow: 2px 4px 2px 4px #999999;">
 				</center>
-		  <div class="card-body">
-			<h5 class="card-title">
-				<%=movie.name%>
+		  <div class="card-body" style="color:black">
+			<h5 class="card-title" >
+				<h3 style=" font-size:2.5em;font-family: 'Lobster', cursive; ">
+					<%=movie.name%>
+				
 				<% var avg_rating=0%>
 				<% var n=0%>
 				<% for(let comment of movie.comments){%>
@@ -22,11 +81,12 @@
 				
 				<% avg_rating = parseInt(avg_rating) %>
 				
-				
-				 
-  <p class="starability-result float-end" data-rating="<%=avg_rating%>">
+				<span class="starability-result float-end" data-rating="<%=avg_rating%>">
     Rated: <%=avg_rating%> stars
-  </p>
+  </span>
+					</h3>
+				 
+  
 				
 				
 				<!-- <% if(avg_rating) {%>  
@@ -41,7 +101,7 @@
 				<%}%> -->
 			  </h5>
 			  
-			  
+			  <br>
 			  
 			<p class="card-text"><%=movie.review%></p>
 		  </div>
@@ -54,7 +114,7 @@
 		  </div>
 			<% }%>
 			<div class="card-footer text-muted">
-				Submitted by <%=movie.author.username%>
+				Submitted by <%=movie.author.username.split("@")[0]%>
 			</div> 
 			
 			<div class="card-footer text-muted">
@@ -98,7 +158,11 @@
 		<%}%> -->
 		
 	</div>
-	<div class="col-4">
+		 <div class="col-4" style="border:1px solid black
+; ">
+			 
+		
+	<div  style="padding:2px">
 			<h2>
 			Leave a comment!!
 			</h2>
@@ -134,14 +198,17 @@
 		<% for(let comment of movie.comments){%>
 		<br>
 		<!-- <div class="card  p-2" > -->
-		<div class="card  p-2" style="box-shadow: 2px 4px 2px 4px #999999;" >
+		<div class="card  p-2" style="box-shadow: 2px 4px 2px 4px #999999;background: linear-gradient(to right,#C6FFDD,#FBD786);color:black" >
+			
+			
+			
 			<div>
 					<p class="text-muted font-italic float-end">
 					<% var m = moment(comment.date); %> <%= m.fromNow() %>
 						
 				</p>
 				
-			<div class="card-body">
+			<div class="card-body" >
 				
 				</div>
 				
@@ -164,7 +231,6 @@
 				
 				<h5>
 					
-				
 				<p class="card-text">
 					Comment:
 					<%=comment.body%>
@@ -177,8 +243,7 @@
 					Delete
 					</button>
 					<span class="card-subtitle mb-2 text-muted float-end" >
-					Submitted by:
-					<%=comment.author.username%>
+					Submitted by:<%=comment.author.username.split("@")[0]%>
 				</span>
 					
 					
@@ -189,18 +254,20 @@
 					Submitted by:
 					<%=comment.author.username%>
 				</span>
-				
+				</div>
 				<%}%>
 			</div>
 			
 		</div>
+			 <br>
 		<%}%>
 			
 			
 	</div>
 	
+
 </div>
- 
+
 
 	
 
