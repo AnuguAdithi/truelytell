@@ -60,15 +60,15 @@ body
 	</h1>
 	
 	<div class="col-10 offset-1">
-		<form action="/movies/<%=communityId%>/<%=movie._id%>?_method=PUT" method="POST" novalidate class="validated-form">
+		<form action="/movies/<%=communityId%>/<%=movie._id%>?_method=PUT" method="POST" novalidate class="validated-form" enctype="multipart/form-data">
 			<div class="mb-3">
 				<label class="form-label" for="name">Movie Name</label>
 				<input class="form-control" type="text" required id="name" name="name" value="<%=movie.name%>">
 			</div>
 
 			<div class="mb-3">
-				<label class="form-label" for="url">Movie Image</label>
-				<input class="form-control" type="text" required id="url" name="image" value="<%=movie.image%>">
+				<label class="form-label" for="url">Upload Image</label>
+				<input type="file" required id="image" name="image" value="<%=movie.image%>">
 			</div>
 			<label for="floatingTextarea2">Review</label>
 			<div class="form-floating mb-3">

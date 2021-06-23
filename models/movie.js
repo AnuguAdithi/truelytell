@@ -5,12 +5,10 @@ const Schema = mongoose.Schema;
 
 const movieSchema = new Schema({
 	name:String,
-	image:String,
-	// image:
-	// {
-	// data: Buffer,
-	// contentType: String
-	// },
+	image:{
+		url:String,
+		filename:String
+	},
 	review:String,
 	date : Date,
 	author:{

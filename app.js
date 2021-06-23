@@ -1,3 +1,8 @@
+if(process.env.NODE_ENV !== "production"){
+	require('dotenv').config();
+}
+console.log(process.env.SECRET);
+
 const express = require('express');
 const app = express();
 // const session = require('express-session');
@@ -18,6 +23,13 @@ const Comment = require('./models/comment');
 const Community = require('./models/community');
 const Request = require('./models/request');
 var moment = require('moment');
+
+
+// for cloudinary
+const multer = require('multer');
+const {storage} = require('./cloudinary');
+const upload = multer({storage});
+var { cloudinary } = require('./cloudinary');
 
 
 // for authentication
@@ -575,31 +587,23 @@ app.delete('/community/:id',isLoggedIn,catchAsync(async(req,res)=>{
 
 //movie - post route
 
-app.post('/movies/:comId',isLoggedIn,catchAsync(async(req,res,next)=>{
-	
-	// if(!req.body.movies) throw new ExpressError('Invalid Movie Review ',400); //for missing data
-	// const movieSchema = Joi.object({
-	// 	movie : Joi.object({
-	// 		name: Joi.string().required(),
-	// 		image: Joi.string().required(),
-	// 		review: Joi.string().required().min(1),
-	// 	}).required()
-	// })
-	// const result = movieSchema.validate(req.body);
-	// console.log(result);
-	
-	console.log(req.body.image);
+app.post('/movies/:comId',isLoggedIn,upload.single('image'),catchAsync(async(req,res,next)=>{	
+	// console.log(req.body,req.file);
+	// res.send("done");
 	
 	const movie = new Movie({
 	name : req.body.name.trim(),
-	image : req.body.image,
+	image : {
+		url:req.file.path,
+		filename:req.file.filename
+	},
 	review : req.body.review,
 	author: req.user._id,
 	date: new Date()
 	});
-	console.log(movie.image);
+	console.log(movie);
 	const com = await Community.findById(req.params.comId);
-	com.moviePosts.push(movie);    // changed post movie
+	com.moviePosts.push(movie);   
 	
 	
 	const request = await Request.find().populate({
@@ -612,16 +616,11 @@ app.post('/movies/:comId',isLoggedIn,catchAsync(async(req,res,next)=>{
 	const community = await Community.findById(com._id).populate({
 		path : 'users',
 	}).populate('author');
-	
-	// console.log(community.users,community);
 	for(let req of request)
 	{
-		// console.log(req.title,movie.name,req.title==(movie.name),req.group,com._id,req.group.equals(com._id));
 		if(req.title == movie.name && req.group.equals(com._id))
 		{
-			// console.log(req._id);
 			await Request.findByIdAndDelete(req._id);
-			// console.log(request);
 			for(let delUser of community.users)
 			{
 				await User.findByIdAndUpdate(delUser._id,{$pull: {requests: req._id}});
@@ -633,7 +632,6 @@ app.post('/movies/:comId',isLoggedIn,catchAsync(async(req,res,next)=>{
 	
 	await movie.save();
 	await com.save();
-	// console.log(com);
 	res.redirect(`/movies/post/${movie._id}/${com._id}`);
 }));
 
@@ -664,7 +662,7 @@ app.get('/movies/:comId/:id/edit',isLoggedIn,catchAsync(async(req,res,next)=>{
 
 }));
 
-app.put('/movies/:comId/:id',isLoggedIn,catchAsync(async(req,res,next)=>{
+app.put('/movies/:comId/:id',isLoggedIn,upload.single('image'),catchAsync(async(req,res,next)=>{
 	// res.send("It worked!!");
 	// const{id} = req.params.id;
 	// console.log(req.params.id,req.body);
@@ -674,7 +672,10 @@ app.put('/movies/:comId/:id',isLoggedIn,catchAsync(async(req,res,next)=>{
 	
 	const movie = {
 		name : req.body.name,
-		image : req.body.image,
+		image : {
+		url:req.file.path,
+		filename:req.file.filename
+	},
 		review : req.body.review
 	};
 	
@@ -695,7 +696,7 @@ app.delete('/movies/:comId/:id',isLoggedIn,catchAsync(async(req,res,next)=>{
 	{
 		await Comment.findByIdAndDelete(comment);
 	}
-	
+	await cloudinary.uploader.destroy(moviE.image.filename);
 	await Movie.findByIdAndDelete(req.params.id);
 	
 	res.redirect(`/movies/${req.params.comId}`);

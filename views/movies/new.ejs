@@ -21,16 +21,19 @@ body
 		New Movie
 	</h1>
 	<div class="col-10 offset-1" >
-		<form action="/movies/<%=communityId%>" method="POST" novalidate class="validated-form"  >
+		<form action="/movies/<%=communityId%>" method="POST" novalidate class="validated-form" enctype="multipart/form-data" >
 			<div class="mb-3">
 				<label class="form-label" for="name">Movie Name</label>
 				<input class="form-control" type="text" required id="name" name="name">
 			</div>
 
-			<div class="mb-3">
-				<label class="form-label" for="url">Movie Image</label>
-				<input class="form-control" type="text" required id="url" name="image">
-			</div>
+			<div class="input-group mb-3">
+  <input type="file" class="form-control" required name="image" id="image">
+  <!-- <label class="input-group-text" for="inputGroupFile02">Upload</label> -->
+</div>
+			<!-- <div class="mb-3">
+				<input type="file" name="image" id="">
+			</div> -->
 			
 			<!-- <div class="mb-3">
 				<label class="form-label" for="url">Movie Image</label>
