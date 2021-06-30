@@ -420,17 +420,21 @@ app.get('/movies/:comId',isLoggedIn,catchAsync(async(req,res,next)=>{
 	}).
 	populate({
 		path : 'users'
+	}).
+	populate({
+		path : 'author'
 	}).exec(function(err,comm){
 		if(err) res.send(err);
 		else
 		{
+			
 			Community.find({})
 			.populate('author')
 				.exec(function(err,comm1){
 				if(err) res.send(err);
 				else{
-					// console.log(comm.users);
-					res.render('movies/index',{community:comm,comm:comm1,userr:req.user,users,movies});
+					// console.log(comm);
+					res.render('movies/index',{community:comm,comm1:comm1,userr:req.user,users,movies});
 				}
 			});
 			// res.render('movies/index',{movies,community:comm});           //changed
