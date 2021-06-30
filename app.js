@@ -5,7 +5,7 @@ console.log(process.env.SECRET);
 
 const express = require('express');
 const app = express();
-// const session = require('express-session');
+const session = require('express-session');
 const path = require('path');
 var cookieParser = require('cookie-parser'); // form input 
 const mongoose = require('mongoose');
@@ -37,11 +37,23 @@ const passport = require('passport');
 var LocalStatergy = require('passport-local'); //middle-eare for authentucation
 var passportLocalMongoose = require('passport-local-mongoose');
 
+// const MongoDBStore = require('connect-mongo')(session);
+const dbUrl = process.env.DB_URL||'mongodb://localhost:27017/truely-tell';
 
-mongoose.connect('mongodb://localhost:27017/truely-tell',{
-	useNewUrlParser : true,
+
+
+// 'mongodb://localhost:27017/truely-tell'
+mongoose.connect(dbUrl,{
+// mongoose.connect('mongodb://localhost:27017/truely-tell',{
+	// useNewUrlParser : true,
+	// useCreateIndex: true,
+	// useUnifiedTopology:true,
+	
+	useNewUrlParser: true,
 	useCreateIndex: true,
-	useUnifiedTopology:true
+	useUnifiedTopology: true,
+	useFindAndModify: false,
+	
 });
 mongoose.set('useFindAndModify', false);
 
@@ -51,12 +63,12 @@ db.once("open",()=>{
 	console.log("Database connected");
 });
 
-mongoose.connect('mongodb://localhost:27017/truely-tell',{
-	useNewUrlParser : true,
-	useCreateIndex: true,
-	useUnifiedTopology:true
-});
-mongoose.set('useFindAndModify', false);
+// mongoose.connect('mongodb://localhost:27017/truely-tell',{
+// 	useNewUrlParser : true,
+// 	useCreateIndex: true,
+// 	useUnifiedTopology:true
+// });
+// mongoose.set('useFindAndModify', false);
 
 app.engine('ejs',ejsMate) // for templates
 app.set('view engine','ejs'); //no need of explicitly specifying .ejs
@@ -103,9 +115,20 @@ app.use(methodOverride('_method'));
 
 // app.use(session(sessionConfig));
 
+// const store = new MongoStore({
+// 	url:dbUrl,
+// 	secret : "nothing",
+// 	touchAfter: 24*60*60
+// });
+// store.on("error",function(e){
+// 	console.log("Session store error!!");;
+// })
+
+const secret = process.env.SECRET || "nothing";
 
 app.use(require("express-session")({
-	secret : "nothing",
+	// store,
+	secret ,
 	resave: false,
 	saveUninitialized: false
 }));
@@ -118,53 +141,9 @@ passport.serializeUser(User.serializeUser());
 
 passport.deserializeUser(User.deserializeUser());
 
-
-
-
-// app.use(function (req, res, next) {
-// 	res.locals.currentUser = req.user;
-// 	res.locals.moment = require('moment');
-// 	next();
-// });
-
-
-
-
-
-
 app.use(async function(req,res,next) {
-	// if(req.user)
-	// {
-	// 	res.locals.user = req.user;
-	// 	console.log(req.user._id);
-	// 	const user = await User.findById(req.user._id).populate({
-	// 		path: 'requests'
-	// 	}).populate('author');
-	// 	console.log(user[0]);
-	// 	next();
-	// 	}
-	// else
-	// {
-	
-	
-	// const findMovie = await Movie.findById(req.params.id).populate({
-	// 	path: 'comments',
-	// 	populate: {
-	// 		path: 'author'
-	// 	}
-	// }).populate('author');
-	
-	
-	
 	if(req.user)
 	{
-		// await User
-		// .findById( req.user._id )
-		// .populate("requests") 						// key to populate
-		// .then(user => {
-		// 	console.log(user);
-		// res.locals.user = req.user;
-   // });
 		User.findById(req.user._id).
 	populate({
 		path : 'requests',
@@ -179,20 +158,18 @@ app.use(async function(req,res,next) {
 				next();
 		}
 	});
-	// }
+	
 	}
 	else{
 		res.locals.user = await User.find({
 			username : 'default'
 		})[0];
-		// console.log(req.user);
-		
-		// res.user = req.user;
+
 		res.locals.currentUser = req.user;
 	res.locals.moment = require('moment');
 	
 		next();
-		// res.re('/register');
+
 	}
 });
 
@@ -339,7 +316,7 @@ app.post('/movies/request/:comId',isLoggedIn,catchAsync(async(req,res,next)=>{
 		// 	path:'name'
 		// }
 	}).populate('author');
-	console.log(com);
+	// console.log(com);
 	for(let post of com.moviePosts)
 	{
 		if(post.name == request.title)
@@ -565,6 +542,17 @@ app.delete('/community/:id/:userId',isLoggedIn,catchAsync(async(req,res)=>{
 	
 	res.redirect('/');
 }));
+
+//removing a person from community
+app.delete('/movies/:comId/:userId',isLoggedIn,catchAsync(async(req,res)=>{
+	var com = await Community.findById(req.params.comId);
+	// const {id,userId} = req.params;
+	await Community.findByIdAndUpdate(req.params.comId,{$pull: {users: req.params.userId}});
+	
+	res.redirect(`/movies/${req.params.comId}`);
+	
+}));
+
 //deleting a community
 app.delete('/community/:id',isLoggedIn,catchAsync(async(req,res)=>{
 	
@@ -601,7 +589,7 @@ app.post('/movies/:comId',isLoggedIn,upload.single('image'),catchAsync(async(req
 	author: req.user._id,
 	date: new Date()
 	});
-	console.log(movie);
+	// console.log(movie);
 	const com = await Community.findById(req.params.comId);
 	com.moviePosts.push(movie);   
 	
@@ -760,7 +748,8 @@ app.use((err,req,res,next)=>{
 	res.status(statusCode).render('error',{err});
 });
 
+const port = process.env.PORT || 3000;
 
-app.listen(process.env.PORT || 3000,()=>{
-	console.log("Serving on port 3000");
+app.listen(port,()=>{
+	console.log(`Serving on port ${port}`);
 });

@@ -83,10 +83,10 @@ width:300px
 		}
 		
 		
-		.edit_hover_class a{
+		.edit_hover_class button{
   visibility:hidden;
 }
-.edit_hover_class:hover a {
+.edit_hover_class:hover button {
  visibility:visible;
 }
 		
@@ -250,20 +250,22 @@ width:300px
 					<div class="ex3" style="width:1500px">
 						
 						<% for(let frnd of community.users){%>	
-						<p class="edit_hover_class">
+						<div class="edit_hover_class">
 							<img src="https://cdn4.iconfinder.com/data/icons/small-n-flat/24/user-alt-512.png">
 							<%=frnd.username.split("@")[0]%>
 							
-							<span class=" m-2 p-1 " >
+				
 								
+						
+							<span class=" m-2 p-1 " >
 									<% if(community.author.equals(userr._id)){%>
-									<a href="#" class="fal fa-trash-alt flex" style="color:red;font-size:1.3em"></a>
+								<form class="d-inline" action="/movies/<%=community._id%>/<%=frnd._id%>?_method=DELETE" method="POST">
+									<button type="submit" class="fal fa-trash-alt flex" style="color:red;font-size:1.3em;background-color:#2E2E2E"></button>
+									</form>
 								<%}%>
 							</span>
-							
-							
-
-						</p>
+								
+						</div>
 
 						<%}%>
 					</div>
