@@ -524,9 +524,10 @@ app.post('/join',isLoggedIn,catchAsync(async(req,res,next)=>{
 	const community = await Community.find({
 		'title' : req.body.title
 	});	
-	if(!(community[0].password.equals(req.body.password)))
+	console.log(community.passport);
+	if(!(community.password==(req.body.password)))
 		{
-			res.render('joinCommunity',{msg:"incorrect details, enter again to join a community"});
+			res.render('joinCommunity',{msg:"incorrect details, enter correct details to join a community"});
 		}
 	community[0].users.push(req.user);
 	await community[0].save();
