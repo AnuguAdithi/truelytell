@@ -1,7 +1,7 @@
 if(process.env.NODE_ENV !== "production"){
 	require('dotenv').config();
 }
-console.log(process.env.SECRET);
+// console.log(process.env.SECRET);
 
 const express = require('express');
 const app = express();
@@ -319,7 +319,7 @@ app.post('/movies/request/:comId',isLoggedIn,catchAsync(async(req,res,next)=>{
 	// console.log(com);
 	for(let post of com.moviePosts)
 	{
-		if(post.name == request.title)
+		if(post.name.Trim().ToLower()== request.title.Trim().ToLower())
 		{
 			res.redirect(`/movies/post/${post._id}/${req.params.comId}`)
 		}
@@ -434,7 +434,7 @@ app.get('/movies/:comId',isLoggedIn,catchAsync(async(req,res,next)=>{
 				if(err) res.send(err);
 				else{
 					// console.log(comm);
-					res.render('movies/index',{community:comm,comm1:comm1,userr:req.user,users,movies});
+					res.render('movies/index',{community:comm,comm:comm1,userr:req.user,users,movies});
 				}
 			});
 			// res.render('movies/index',{movies,community:comm});           //changed
