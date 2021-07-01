@@ -437,6 +437,7 @@ app.get('/movies/:comId',isLoggedIn,catchAsync(async(req,res,next)=>{
 				.exec(function(err,comm1){
 				if(err) res.send(err);
 				else{
+					
 					// console.log(comm);
 					res.render('movies/index',{community:comm,comm:comm1,userr:req.user,users,movies});
 				}
@@ -548,9 +549,7 @@ app.post('/create',isLoggedIn,catchAsync(async(req,res,next)=>{
 		author : req.user._id
 	});
 	await community.save();
-	// req.user.groups.push(community);
 	await req.user.save();
-	// console.log(community,req.user);
 	res.redirect(`/`);
 }));
 
@@ -684,12 +683,13 @@ app.get('/movies/:comId/:id/edit',isLoggedIn,catchAsync(async(req,res,next)=>{
 
 }));
 
-app.put('/movies/:comId/:id',isLoggedIn,upload.single('image'),catchAsync(async(req,res,next)=>{
+app.put('/movies/post/:comId/:id',isLoggedIn,upload.single('image'),catchAsync(async(req,res,next)=>{
 	// res.send("It worked!!");
 	// const{id} = req.params.id;
 	// console.log(req.params.id,req.body);
-	const {id} = req.params;
+	const {comId,id} = req.params;
 	const moviE = await Movie.findById(id);
+	
 	if(!moviE.author._id.equals(req.user._id)) throw new ExpressError('You need permissions to do that',400);
 	
 	const movie = {
@@ -701,15 +701,23 @@ app.put('/movies/:comId/:id',isLoggedIn,upload.single('image'),catchAsync(async(
 		review : req.body.review
 	};
 	
-	const Updatedmovie = await Movie.findByIdAndUpdate(req.params.id,movie);      // ----------try
+	const Updatedmovie = await Movie.findByIdAndUpdate(id,movie);      // ----------try
 	// console.log(Updatedmovie);
-	await Community.findByIdAndUpdate(req.params.comId,{moviePosts:req.params.id});
-	res.redirect(`/movies/post/${req.params.id}/${req.params.comId}`);
+
+	
+	// let movies = await Community.findById(comId).moviePosts;
+	
+	let community = await Community.findById(comId);
+	// console.log(community.moviePosts);
+	// await Community.findByIdAndUpdate(comId,{moviePosts:Updatedmovie});
+	
+	res.redirect(`/movies/post/${id}/${comId}`);
 }));
 
-app.delete('/movies/:comId/:id',isLoggedIn,catchAsync(async(req,res,next)=>{
+app.delete('/movies/post/:comId/:id',isLoggedIn,catchAsync(async(req,res,next)=>{
 	// const{id}=req.params;
 	const {id} = req.params;
+	
 	const moviE = await Movie.findById(id);
 	if(!moviE.author._id.equals(req.user._id)) throw new ExpressError('You need permissions to do that',400);
 	await Community.findByIdAndUpdate(req.params.comId,{$pull: {moviePosts: req.params.id}});
