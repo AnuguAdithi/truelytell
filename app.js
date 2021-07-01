@@ -319,7 +319,7 @@ app.post('/movies/request/:comId',isLoggedIn,catchAsync(async(req,res,next)=>{
 	// console.log(com);
 	for(let post of com.moviePosts)
 	{
-		if(post.name.Trim().ToLower()== request.title.Trim().ToLower())
+		if(post.name.trim().toLowerCase() == request.title.trim().toLowerCase())
 		{
 			res.redirect(`/movies/post/${post._id}/${req.params.comId}`)
 		}
@@ -446,15 +446,27 @@ app.get('/movies/:comId',isLoggedIn,catchAsync(async(req,res,next)=>{
 
 app.post('/movies/:comId/search',isLoggedIn,catchAsync(async(req,res,next)=>{
 	
-	const movieName = req.body.title.trim();
+	const movieName = req.body.title.trim().toLowerCase();
 	// console.log(req.body.title);
 	let movies = await Movie.find({});
+	let movieSearch =[];
 	if(movieName)
 	{
-		movies = await Movie.find({
-			name:movieName
-		});
+		
+		// movies = await Movie.find({
+		// 	name:movieName
+		// });
 		// console.log(movies);
+		// console.log(movies);
+		
+		
+		for(let post of movies)
+		{
+			if(post.name.trim().toLowerCase() == movieName)
+			{
+				movieSearch.push(post);
+			}
+		}
 	}
 	// console.log(movieName,movies);
 	// if(movies.length!=0)
@@ -468,6 +480,9 @@ app.post('/movies/:comId/search',isLoggedIn,catchAsync(async(req,res,next)=>{
 	}).
 	populate({
 		path : 'users'
+	}).
+	populate({
+		path : 'author'
 	}).exec(function(err,comm){
 		if(err) res.send(err);
 		else
@@ -477,7 +492,8 @@ app.post('/movies/:comId/search',isLoggedIn,catchAsync(async(req,res,next)=>{
 				.exec(function(err,comm1){
 				if(err) res.send(err);
 				else{
-					res.render('movies/index',{community:comm,comm:comm1,userr:req.user,users,movies});
+					// console.log(movieSearch);
+					res.render('movies/index',{community:comm,comm:comm1,userr:req.user,users,movies:movieSearch});
 				}
 			});
 			// res.render('movies/index',{movies,community:comm});           //changed
