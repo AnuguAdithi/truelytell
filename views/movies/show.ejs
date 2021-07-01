@@ -55,218 +55,161 @@
     direction:ltr;
 }
 </style>
-
 <link rel="stylesheet" href="/stylesheets/stars.css">
 <a href="/movies/new/<%=comId%>" type="button" class="btn btn-warning mb-4 mt-0">new Movie</a>
 <a href="/movies/request/<%=comId%>" type="button" class="btn btn-warning mb-4 mt-0">Request</a>
 <a type="button" href="/movies/<%=comId%>"  class="btn btn-warning mb-4 mt-0">All Movies</a>
-	 <div class="row"id="scroll"  >
-	<div class="col-8 "  style="height=100px;padding:0px">
-		<div class="card mb-3"  style=" border:1px solid black;background: linear-gradient(to right, #f7797d, #FBD786, #C6FFDD);">
-			<center>
-		  <img src='<%=movie.image.url%>' class="card-img-top mt-3" alt="image" style=" border-radius: 2px;padding: 5px;width: 40%;height=50%;box-shadow: 2px 4px 2px 4px #999999;">
-				</center>
-		  <div class="card-body" style="color:black">
-			<h5 class="card-title" >
-				<h3 style=" font-size:2.5em;font-family: 'Lobster', cursive; ">
-					<%=movie.name%>
+	 <div class="row"id="scroll">
+		 <div class="col-8 "  style="height=100px;padding:0px">
+			 <div class="card mb-3"  style=" border:1px solid black;background: linear-gradient(to right, #f7797d, #FBD786, #C6FFDD);">
+				 <center>
+					 <img src='<%=movie.image.url%>' class="card-img-top mt-3" alt="image" style=" border-radius: 2px;padding: 5px;width: 40%;height=50%;box-shadow: 2px 4px 2px 4px #999999;">
+				 </center>
+				 <div class="card-body" style="color:black">
+					 <h5 class="card-title" >
+						 <h3 style=" font-size:2.5em;font-family: 'Lobster', cursive; ">
+							 <%=movie.name%>
+							 <% var avg_rating=0%>
+							 <% var n=0%>
+							 <% for(let comment of movie.comments){%>
+							 <% n=n+1%>
+							 <% avg_rating = avg_rating+comment.rating %>
+							 <% }%>
+							 <% avg_rating = avg_rating/n %>
 				
-				<% var avg_rating=0%>
-				<% var n=0%>
-				<% for(let comment of movie.comments){%>
-					<% n=n+1%>
-					<% avg_rating = avg_rating+comment.rating %>
-				<% }%>
-				<% avg_rating = avg_rating/n %>
+							 <% avg_rating = parseInt(avg_rating) %>
 				
-				<% avg_rating = parseInt(avg_rating) %>
-				
-				<span class="starability-result float-end" data-rating="<%=avg_rating%>">
-    Rated: <%=avg_rating%> stars
-  </span>
-					</h3>
-				 
-  
-				
-				
-				<!-- <% if(avg_rating) {%>  
-				<span class="starability-result" data-rating="<%= avg_rating%>" style="width:1px;height:1px">
-					Rated: <%= avg_rating%> stars
-				</span>
-				<%}%>
-				<% if(!avg_rating) {%>  
-				<span class="starability-result" data-rating="<%= avg_rating%>">
-					Rated: <%=  avg_rating%> stars
-				</span>-
-				<%}%> -->
-			  </h5>
-			  
-			  <br>
-			  
-			<p class="card-text"><%=movie.review%></p>
-		  </div>
-			<% if(user && movie.author._id.equals(user._id)) {%>  
-		  <div class="card-body">
-			  <a class="card-link btn btn-info" href="/movies/<%=comId%>/<%=movie._id%>/edit">Edit</a>
-			  <form class="d-inline" action="/movies/<%=comId%>/<%=movie._id%>?_method=DELETE" method="POST">
-				  <button class="btn btn-danger">Delete</button>
-			  </form> 
-		  </div>
-			<% }%>
-			<div class="card-footer text-muted">
-				Submitted by <%=movie.author.username.split("@")[0]%>
-			</div> 
-			
-			<div class="card-footer text-muted">
-				<p class="text-muted font-italic">
-					<% var m = moment(movie.date); %> <%= m.fromNow() %>
-				</p>
-			</div>
-			
-		</div>
-		<!-- <h2>
-			Leave a comment!!
-			</h2>
-		<form action="/movies/<%=movie._id%>/comments" method="POST"  class="mb-3 validated-form"  novalidate>
-			<div class="mb-3">
-				<label class="form-label" for="rating">Rating</label>
-				<input class="form-range" type="range" min="1" max="5" name="rating" id="rating">
-				<label class="form-label" for="body">comments</label>
-				<textarea class="form-control" name="body" id="body" cols="30" rows="3" required></textarea>
-			</div>
-			<button class="btn btn-success">
-				Submit
-			</button>
-		</form>
-		<% for(let comment of movie.comments){%>
-			
-		<div class="card mb-3">
-				
-		
-			<div class="card-body">
-				<h5 class="card-title">
-					Rating: <%= comment.rating%>
-				</h5>
-				<p class="card-text">
-					Comment:
-					<%=comment.body%>
-				</p>
-				
-
-			</div>
-		</div>
-		<%}%> -->
-		
-	</div>
+							 <span class="starability-result float-end" data-rating="<%=avg_rating%>">
+								 Rated: <%=avg_rating%> stars
+							 </span>
+						 </h3>
+					 </h5>
+					 <br>
+					 <p class="card-text"><%=movie.review%></p>
+				 </div>
+				 <% if(user && movie.author._id.equals(user._id)) {%>  
+				 <div class="card-body">
+					 <a class="card-link btn btn-info" href="/movies/<%=comId%>/<%=movie._id%>/edit">Edit</a>
+					 <form class="d-inline" action="/movies/<%=comId%>/<%=movie._id%>?_method=DELETE" method="POST">
+						 <button class="btn btn-danger">Delete</button>
+					 </form> 
+				 </div>
+				 <% }%>
+				 <div class="card-footer text-muted">
+					 Submitted by <%=movie.author.username.split("@")[0]%>
+				</div> 
+				 <div class="card-footer text-muted">
+					 <p class="text-muted font-italic">
+						 <% var m = moment(movie.date); %> <%= m.fromNow() %>
+					 </p>
+				 </div>
+			 </div>
+		 </div>
 		 <div class="col-4" style="border:1px solid black
 ; ">
-			 
-		
-	<div  style="padding:2px">
-			<h2>
-			Leave a comment!!
-			</h2>
-		<form action="/movies/<%=comId%>/<%=movie._id%>/comments" method="POST"  class="mb-3 validated-form"  novalidate >
-			<div class="mb-3">
-				<!-- <label class="form-label" for="rating">Rating</label> -->
-
-				<!-- <input class="form-range" type="range" min="1" max="5" name="rating" id="rating"> -->
+			<div  style="padding:2px">
+				<h2>
+					Leave a comment!!
+				</h2>
+				<form action="/movies/<%=comId%>/<%=movie._id%>/comments" method="POST"  class="mb-3 validated-form"  novalidate >
+					<div class="mb-3">
 				
-				<fieldset class="starability-slot">
-				  <h5>Rating:</h5>
-				  <input type="radio" id="no-rate" class="input-no-rate" name="rating" value="0" checked aria-label="No rating." />
-				  <input type="radio" id="first-rate1" name="rating" value="1" />
-				  <label for="first-rate1" title="Terrible">1 star</label>
-				  <input type="radio" id="first-rate2" name="rating" value="2" />
-				  <label for="first-rate2" title="Not good">2 stars</label>
-				  <input type="radio" id="first-rate3" name="rating" value="3" />
-				  <label for="first-rate3" title="Average">3 stars</label>
-				  <input type="radio" id="first-rate4" name="rating" value="4" />
-				  <label for="first-rate4" title="Very good">4 stars</label>
-				  <input type="radio" id="first-rate5" name="rating" value="5" />
-				  <label for="first-rate5" title="Amazing">5 stars</label>
-				</fieldset>
-				
-				
-				<label class="form-label" for="body">comments</label>
-				<textarea class="form-control" name="body" id="body" cols="30" rows="3" required ></textarea>
-			</div>
-			<button class="btn btn-success">
-				Submit
-			</button>
-		</form>
-		<% for(let comment of movie.comments){%>
-		<br>
-		<!-- <div class="card  p-2" > -->
-		<div class="card  p-2" style="box-shadow: 2px 4px 2px 4px #999999;background: linear-gradient(to right,#C6FFDD,#FBD786);color:black" >
-			
-			
-			
-			<div>
-					<p class="text-muted font-italic float-end">
-					<% var m = moment(comment.date); %> <%= m.fromNow() %>
-						
-				</p>
-				
-			<div class="card-body" >
-				
-				</div>
-				
-				<h4 class="card-title">
-					Rating:
-					<% if(comment.rating) {%>  
-				
-					<span class="starability-result" data-rating="<%= comment.rating%>" style="width:1px;height:1px">
-						Rated: <%= comment.rating%> stars
-					</span>
-					<%}%>
-					<% if(!comment.rating) {%>  
-					<span class="starability-result" data-rating="<%= comment.rating%>">
-						Rated: <%= comment.rating%> stars
-					</span>-
-					<%}%>
-					
-				</h4>
-				
-				
-				<h5>
-					
-				<p class="card-text">
-					Comment:
-					<%=comment.body%>
-				</p>
-				 <% if(user && comment.author._id.equals(user._id)) {%>  
-					</h5>
-				
-				<form action="/movies/<%=comId%>/<%=movie._id%>/comments/<%=comment._id%>?_method=DELETE" method="POST"  >
-				<button class="btn btn-sm btn-danger">
-					Delete
+						<fieldset class="starability-slot">
+						  <h5>Rating:</h5>
+						  <input type="radio" id="no-rate" class="input-no-rate" name="rating" value="0" checked aria-label="No rating." />
+						  <input type="radio" id="first-rate1" name="rating" value="1" />
+						  <label for="first-rate1" title="Terrible">1 star</label>
+						  <input type="radio" id="first-rate2" name="rating" value="2" />
+						  <label for="first-rate2" title="Not good">2 stars</label>
+						  <input type="radio" id="first-rate3" name="rating" value="3" />
+						  <label for="first-rate3" title="Average">3 stars</label>
+						  <input type="radio" id="first-rate4" name="rating" value="4" />
+						  <label for="first-rate4" title="Very good">4 stars</label>
+						  <input type="radio" id="first-rate5" name="rating" value="5" />
+						  <label for="first-rate5" title="Amazing">5 stars</label>
+						</fieldset>
+						<label class="form-label" for="body">comments</label>
+						<textarea class="form-control" name="body" id="body" cols="30" rows="3" required ></textarea>
+					</div>
+					<button class="btn btn-success">
+						Submit
 					</button>
-					<span class="card-subtitle mb-2 text-muted float-end" >
-					Submitted by:<%=comment.author.username.split("@")[0]%>
-				</span>
-					
-					
 				</form>
-				<%}%>
-				<%if(!(user && comment.author._id.equals(user._id))){%>
-				<span class="card-subtitle mb-2 text-muted float-end" >
-					Submitted by:
-					<%=comment.author.username%>
-				</span>
+				<% for(let comment of movie.comments){%>
+				<br>
+				<div class="card  p-2" style="box-shadow: 2px 4px 2px 4px #999999;background: linear-gradient(to right,#C6FFDD,#FBD786);color:black" >
+					<div>
+						<p class="text-muted font-italic float-end">
+						<% var m = moment(comment.date); %> <%= m.fromNow() %>
+						</p>
+						<div class="card-body" >
+						</div>
+						<h4 class="card-title">
+							Rating:
+							<% if(comment.rating) {%>  
+							<span class="starability-result" data-rating="<%= comment.rating%>" style="width:1px;height:1px">
+								Rated: <%= comment.rating%> stars
+							</span>
+							<%}%>
+							<% if(!comment.rating) {%>  
+							<span class="starability-result" data-rating="<%= comment.rating%>">
+								Rated: <%= comment.rating%> stars
+							</span>-
+							<%}%>
+						</h4>
+						<h5>
+							<p class="card-text">
+								Comment:<%=comment.body%>
+							</p>
+						</h5>
+						
+						<div>
+							<% if(user && comment.author._id.equals(user._id)) {%>  
+							<form action="/movies/<%=comId%>/<%=movie._id%>/comments/<%=comment._id%>?_method=DELETE" method="POST">
+								<button class="btn btn-sm btn-danger">
+									Delete
+								</button>
+								
+							</form>
+							<%}%>
+							<span class="card-subtitle mb-2 text-muted float-end" >
+							Submitted by:<%=comment.author.username.split("@")[0]%>
+						</span>
+						</div>
+							
+					
 				</div>
-				<%}%>
-			</div>
-			
-		</div>
+			 </div>
 			 <br>
-		<%}%>
-			
-			
-	</div>
-	
-
+			 <%}%>
+		 </div>
 </div>
+		 
+		 
+		 		 
+		 
+		
+		 
+		 
+		  
+		 
+		 
+		 
+		 
+		 
+		 
+		 
+		 
+
+		 
+		 
+		 
+		 
+		 
+		 
+		 
+		 
+		 
 
 
 	
