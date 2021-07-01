@@ -176,11 +176,17 @@ width:300px
                 </h4>
                 <a href="/movies/new/<%=community._id%>" type="button" class="btn-sm btn-warning" style="text-decoration:none">new Movie</a>
                 <a type="button" href="/movies/<%=community._id%>" class="btn-sm btn-warning" style="text-decoration:none">All Movies</a>
-                <h4>Friends</h4>
-                <div class="ex3" style="width:1500px">
+                <h4>Members</h4>
+				<p>
+					
+				</p>
+                <div class="ex3" style="width:1000px">
+					<img src="https://cdn4.iconfinder.com/data/icons/small-n-flat/24/user-alt-512.png" style="background-color:white">
+						<%=community.author.username.split("@")[0]%>
+						<p>
 
                     <% for(let frnd of community.users){%>
-                    <p class="edit_hover_class">
+                    <div class="edit_hover_class">
                         <img src="https://cdn4.iconfinder.com/data/icons/small-n-flat/24/user-alt-512.png" style="font-size:10px">
                         <%=frnd.username.split("@")[0]%>
                         <span class="float-end m-2 p-1 ">
@@ -192,7 +198,7 @@ width:300px
 
                         
 
-				    </p>
+				    </div>
 
 				    <%}%>
                 </div>

@@ -278,6 +278,9 @@ app.get('/movies/request/:comId',isLoggedIn,catchAsync(async(req,res,next)=>{
 	Community.findById(req.params.comId).
 	populate({
 		path : 'users'
+	}).
+	populate({
+		path : 'author'
 	}).exec(function(err,comm){
 		if(err) res.send(err);
 		else
@@ -287,6 +290,7 @@ app.get('/movies/request/:comId',isLoggedIn,catchAsync(async(req,res,next)=>{
 				.exec(function(err,comm1){
 				if(err) res.send(err);
 				else{
+					
 					res.render('movies/request',{community:comm,comm:comm1,communityId:req.params.comId,userr:req.user});
 				 }
 			});
