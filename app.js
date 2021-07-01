@@ -524,18 +524,20 @@ app.post('/join',isLoggedIn,catchAsync(async(req,res,next)=>{
 	const community = await Community.find({
 		'title' : req.body.title
 	});	
-	// console.log(community.passport);
-	if(!(community.password==(req.body.password)))
-		{
-			res.render('joinCommunity',{msg:"incorrect details, enter correct details to join a community"});
-		}
-	else{
-		
+	// console.log(community[0].password);
+	if(community[0].password==(req.body.password))
+	{
 		community[0].users.push(req.user);
 	await community[0].save();
-	// res.send(community[0]);
+		res.redirect(`/`);
+			
+			
+			// res.render('joinCommunity',{msg:"incorrect details, enter correct details to join a community"});
 	}
-	res.redirect(`/`);
+	else{
+		res.redirect('/join');
+	}
+	
 }));
 
 app.post('/create',isLoggedIn,catchAsync(async(req,res,next)=>{
