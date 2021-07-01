@@ -516,7 +516,7 @@ app.get('/create',isLoggedIn,catchAsync(async(req,res,next)=>{
 }));
 
 app.get('/join',isLoggedIn,catchAsync(async(req,res,next)=>{
-	res.render('joinCommunity');
+	res.render('joinCommunity',{msg:"incorrect details, enter again to join a community"});
 }));
 
 app.post('/join',isLoggedIn,catchAsync(async(req,res,next)=>{
@@ -524,6 +524,10 @@ app.post('/join',isLoggedIn,catchAsync(async(req,res,next)=>{
 	const community = await Community.find({
 		'title' : req.body.title
 	});	
+	if(!(community[0].password.equals(req.body.password)))
+		{
+			res.render('joinCommunity',{msg:"incorrect details, enter again to join a community"});
+		}
 	community[0].users.push(req.user);
 	await community[0].save();
 	// res.send(community[0]);
