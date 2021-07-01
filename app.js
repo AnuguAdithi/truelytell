@@ -526,7 +526,12 @@ app.post('/join',isLoggedIn,catchAsync(async(req,res,next)=>{
 		'title' : req.body.title
 	});	
 	// console.log(community[0].password);
-	if(community[0].password==(req.body.password))
+	
+	// console.log(community[0].users,community[0].author,req.user._id);
+	if(community[0].users.includes(req.user._id) || community[0].author==req.user._id)
+		res.redirect('/');
+	
+	else if(community[0].password==(req.body.password))
 	{
 		community[0].users.push(req.user);
 	await community[0].save();
