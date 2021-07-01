@@ -516,7 +516,7 @@ app.get('/create',isLoggedIn,catchAsync(async(req,res,next)=>{
 }));
 
 app.get('/join',isLoggedIn,catchAsync(async(req,res,next)=>{
-	res.render('joinCommunity',{msg:"incorrect details, enter again to join a community"});
+	res.render('joinCommunity',{msg:"Join a community to  request for a review or share a review"});
 }));
 
 app.post('/join',isLoggedIn,catchAsync(async(req,res,next)=>{
@@ -524,14 +524,17 @@ app.post('/join',isLoggedIn,catchAsync(async(req,res,next)=>{
 	const community = await Community.find({
 		'title' : req.body.title
 	});	
-	console.log(community.passport);
+	// console.log(community.passport);
 	if(!(community.password==(req.body.password)))
 		{
 			res.render('joinCommunity',{msg:"incorrect details, enter correct details to join a community"});
 		}
-	community[0].users.push(req.user);
+	else{
+		
+		community[0].users.push(req.user);
 	await community[0].save();
 	// res.send(community[0]);
+	}
 	res.redirect(`/`);
 }));
 
