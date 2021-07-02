@@ -3,7 +3,11 @@ const Schema = mongoose.Schema;
 
 
 const requestSchema = new Schema({
-	title:String,
+	title:
+	{
+		type: String,
+		unique:true
+	},
 	author:{
 		type:Schema.Types.ObjectId,
 		ref:'User'

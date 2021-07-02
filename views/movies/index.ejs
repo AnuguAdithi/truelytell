@@ -99,7 +99,14 @@ width:300px
 
 <body class="d-flex flex-column vh-100 conatiner" style="overflow: hidden;overflow-y: hidden;
   overflow-x: hidden;" >
-	
+	<!-- <div style="width:1000px;height:5000px">
+		 <h6>
+		  <%=user%>
+	  </h6>
+		
+	</div>
+	 -->
+	  
 	
 	<nav class="navbar sticky-top navbar-expand-lg navbar-dark bg-dark">
 		
@@ -139,12 +146,20 @@ width:300px
 
 	  
 	  <%}%>
-	  
-	  
+	  <%let count=0;%>
+	 
 	  <% for(let req of user.requests){%>
+	  
+	   
+	 <% if(req.group.equals( checkingId)){%>
+	  <%count=1;%>
 	  <div class="card m-5" style="width: 18rem;box-shadow: 2px 4px 2px 4px #999999">
+		  
 		  <div class="card-body">
+			  
 			  <div class="card-text">
+			
+	  
 				  <form action="/movies/<%=community._id%>/request/<%=req._id%>?_method=DELETE" method="POST">
 					  <div class="d-flex justify-content-end">
 						  <button class="fas fa-trash-alt" style="text-decoration: none;color:red;border-style: none;background-color:white"></button>
@@ -157,35 +172,59 @@ width:300px
 						  </button>
 					  </li>
 				  </h5>
-				  <% for(let comId of comm){%>
-	  <!-- <li><button class="dropdown-item" type="button"><%=comId._id%>:<%=req.group%></button></li> -->
-				  <% if(req.group.equals( comId._id)){%>
+				  
+				
 				  <li>
 					  <button class="dropdown-item" type="button">
-						  Community:<%=comId.title%>
+						  Community:<%=community.title%>
 					  </button>
 				  </li>
-				  <%}%>
-				  <%}%>
-				  <% for(let uId of users){%>
-	  <!-- <li><button class="dropdown-item" type="button"><%=uId.username%>:<%=req%></button></li> -->
+				  
+				    <% for(let uId of users){%>
 				  <% if(req.author.equals(uId._id)){%>
 				  <li>
 					  <button class="dropdown-item" type="button">
-						  Requested by:<%=uId.username%>
+						  Requested by:<%=uId.username.split("@")[0]%>
 					  </button>
 				  </li>
 				  <%}%>
-				  <%}%>
+				   <%}%>
+				  
+				 
 			  </div>
 			  <div class="d-flex justify-content-end">
 				  <a class="btn btn-sm btn-success" href="/movies/new/<%=community._id%>" class="card-link">Give Review</a>
 	  			</div><!--done-->
+			  
 		  </div><!--done-->
 		  
 	  </div>  
     <!-- <li><button class="dropdown-item" type="button">Something else here</button></li> -->
 	  <%}%>
+	   <%}%>
+	  
+	   <%if(count==0){%>
+	  
+	  
+	  <div class="card m-5" style="width: 18rem;box-shadow: 2px 4px 2px 4px #999999;margin:20px">
+		  <div class="card-body">
+			  <div class="card-text">
+				  
+				  <h5 class="card-title">
+					  no request!!!
+				  </h5>
+				 
+			  </div>
+			  
+		  </div><!--done-->
+		  
+	  </div>  
+
+	  
+	  <%}%>
+	  
+	  
+	  
 			  </ul>
 		  </div>
 		  <!-- <div style="max-width:400px;margin:auto">

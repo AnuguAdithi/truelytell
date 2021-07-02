@@ -291,7 +291,7 @@ app.get('/movies/request/:comId',isLoggedIn,catchAsync(async(req,res,next)=>{
 				if(err) res.send(err);
 				else{
 					
-					res.render('movies/request',{community:comm,comm:comm1,communityId:req.params.comId,userr:req.user});
+					res.render('movies/request',{community:comm,comm:comm1,communityId:req.params.comId,userr:req.user,msg:"Register to request for a review or share a review"});
 				 }
 			});
 			// res.render('movies/index',{movies,community:comm});           //changed
@@ -311,14 +311,10 @@ app.post('/movies/request/:comId',isLoggedIn,catchAsync(async(req,res,next)=>{
 		group : req.params.comId
 		// date :
 		});
-	
-	
+
 	// console.log(community);
 	const com = await Community.findById(community._id).populate({
 		path : 'moviePosts',
-		// populate:{
-		// 	path:'name'
-		// }
 	}).populate('author');
 	// console.log(com);
 	for(let post of com.moviePosts)
@@ -329,30 +325,61 @@ app.post('/movies/request/:comId',isLoggedIn,catchAsync(async(req,res,next)=>{
 		}
 	}
 	
-		await request.save(); 
-	// console.log(req.body.title);
+	const searchReq = await Request.find({
+		title : req.body.title
+	});
+	console.log(searchReq.length);
+	if(searchReq.length != 0)
+	{
+		Community.findById(req.params.comId).
+	populate({
+		path : 'users'
+	}).
+	populate({
+		path : 'author'
+	}).exec(function(err,comm){
+		if(err) res.send(err);
+		else
+		{
+			Community.find({})
+			.populate('author')
+				.exec(function(err,comm1){
+				if(err) res.send(err);
+				else{
+					
+					res.render('movies/request',{community:comm,comm:comm1,communityId:req.params.comId,userr:req.user,msg:`request for ${req.body.title} is already made`});
+				 }
+			});
+			// res.render('movies/index',{movies,community:comm});           //changed
+		}
+	});	
+	
+	}
+	else{
+	
+	
+	
+	console.log(community.users);
 
 	for(let id of community.users)
 	{
-		if(req.user._id != id)
-		{
+		// if(req.user._id != id)
+		// {
 		
 			const user = await User.findById(id);
 			user.requests.push(request);
 			await user.save();
-			// console.log(user);
-		}
+		// }
 	}
-	if(req.user._id != community.author._id)
-	{
+	// if(req.user._id != community.author._id)
+	// {
 		const user = await User.findById( community.author._id);
 		user.requests.push(request);
 		await user.save();
-		// console.log(user);
-	}
-		
-	// console.log(req.user);
+	// }
+		await request.save(); 
 	res.redirect(`/movies/${req.params.comId}`);
+	}
 }));
 
 ////////////delete request
@@ -439,7 +466,7 @@ app.get('/movies/:comId',isLoggedIn,catchAsync(async(req,res,next)=>{
 				else{
 					
 					// console.log(comm);
-					res.render('movies/index',{community:comm,comm:comm1,userr:req.user,users,movies});
+					res.render('movies/index',{community:comm,comm:comm1,userr:req.user,users,movies,checkingId:req.params.comId});
 				}
 			});
 			// res.render('movies/index',{movies,community:comm});           //changed
