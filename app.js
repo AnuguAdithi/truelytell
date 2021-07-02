@@ -525,7 +525,7 @@ app.post('/movies/:comId/search',isLoggedIn,catchAsync(async(req,res,next)=>{
 				if(err) res.send(err);
 				else{
 					// console.log(movieSearch);
-					res.render('movies/index',{community:comm,comm:comm1,userr:req.user,users,movies:movieSearch});
+					res.render('movies/index',{community:comm,comm:comm1,userr:req.user,users,movies:movieSearch,checkingId:req.params.comId});
 				}
 			});
 			// res.render('movies/index',{movies,community:comm});           //changed
@@ -686,7 +686,7 @@ app.post('/movies/:comId',isLoggedIn,upload.single('image'),catchAsync(async(req
 		path : 'users',
 	}).populate('author');
 	
-	console.log(community);
+	// console.log(community);
 	
 	
 	for(let req of request)
@@ -702,6 +702,8 @@ app.post('/movies/:comId',isLoggedIn,upload.single('image'),catchAsync(async(req
 			break;
 		}
 	}
+	
+	
 	
 	await movie.save();
 	await com.save();
