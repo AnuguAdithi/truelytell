@@ -780,7 +780,7 @@ app.delete('/movies/:comId/:id/comments/:commentId',isLoggedIn,catchAsync(async(
 	// const {id,commentId} = req.params;
 	await Movie.findByIdAndUpdate(id,{$pull: {comments: commentId}});
 	await Comment.findByIdAndDelete(commentId);
-	await Community.findByIdAndUpdate(req.params.comId,{moviePosts:req.params.id});
+	// await Community.findByIdAndUpdate(req.params.comId,{moviePosts:req.params.id});
 	res.redirect(`/movies/post/${req.params.id}/${req.params.comId}`);
 	// res.send("Delete Me!!");
 }))
