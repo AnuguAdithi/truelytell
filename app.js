@@ -758,7 +758,7 @@ app.post('/movies/:comId/:id/comments',isLoggedIn,catchAsync(async(req,res)=>{
 	// console.log(req.body,comment);
 	await comment.save();
 	await movie.save();
-	await Community.findByIdAndUpdate(req.params.comId,{moviePosts:req.params.id});
+	// await Community.findByIdAndUpdate(req.params.comId,{moviePosts:req.params.id});
 	// console.log(movie);
 	const com =await Community.findById(req.params.comId);
 	// console.log(com[0],com);
