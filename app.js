@@ -685,9 +685,13 @@ app.post('/movies/:comId',isLoggedIn,upload.single('image'),catchAsync(async(req
 	const community = await Community.findById(com._id).populate({
 		path : 'users',
 	}).populate('author');
+	
+	console.log(community);
+	
+	
 	for(let req of request)
 	{
-		if(req.title == movie.name && req.group.equals(com._id))
+		if(req.title.trim().toLowerCase() == movie.name.trim().toLowerCase() && req.group.equals(com._id))
 		{
 			await Request.findByIdAndDelete(req._id);
 			for(let delUser of community.users)
