@@ -359,14 +359,14 @@ app.post('/movies/request/:comId',isLoggedIn,catchAsync(async(req,res,next)=>{
 	
 	
 	
-	console.log(community.users);
-
+	
 	for(let id of community.users)
 	{
 		// if(req.user._id != id)
 		// {
 		
 			const user = await User.findById(id);
+		
 			user.requests.push(request);
 			await user.save();
 		// }
