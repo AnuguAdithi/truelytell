@@ -291,7 +291,7 @@ app.get('/movies/request/:comId',isLoggedIn,catchAsync(async(req,res,next)=>{
 				if(err) res.send(err);
 				else{
 					
-					res.render('movies/request',{community:comm,comm:comm1,communityId:req.params.comId,userr:req.user,msg:"Register to request for a review or share a review"});
+					res.render('movies/request',{community:comm,comm:comm1,communityId:req.params.comId,userr:req.user,msg:"place a request to know review!!"});
 				 }
 			});
 			// res.render('movies/index',{movies,community:comm});           //changed
