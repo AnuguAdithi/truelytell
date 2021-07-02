@@ -513,11 +513,11 @@ app.post('/movies/:comId/search',isLoggedIn,catchAsync(async(req,res,next)=>{
 
 app.get('/create',isLoggedIn,catchAsync(async(req,res,next)=>{
 	// res.send(User);
-	res.render('createCommunity');
+	res.render('createCommunity',{msg:"Create a community to request for a review or share a review"});
 }));
 
 app.get('/join',isLoggedIn,catchAsync(async(req,res,next)=>{
-	res.render('joinCommunity',{msg:"Join a community to  request for a review or share a review"});
+	res.render('joinCommunity',{msg:"Join a community to request for a review or share a review"});
 }));
 
 app.post('/join',isLoggedIn,catchAsync(async(req,res,next)=>{
@@ -525,10 +525,15 @@ app.post('/join',isLoggedIn,catchAsync(async(req,res,next)=>{
 	const community = await Community.find({
 		'title' : req.body.title
 	});	
+	
 	// console.log(community[0].password);
 	
 	// console.log(community[0].users,community[0].author,req.user._id);
-	if(community[0].users.includes(req.user._id) || community[0].author==req.user._id)
+	
+	if(community.length == 0)
+		res.render('joinCommunity',{msg:"No such community exists, enter correct details"});
+		
+	else if(community[0].users.includes(req.user._id) || community[0].author==req.user._id)
 		res.redirect('/');
 	
 	else if(community[0].password==(req.body.password))
@@ -536,12 +541,10 @@ app.post('/join',isLoggedIn,catchAsync(async(req,res,next)=>{
 		community[0].users.push(req.user);
 	await community[0].save();
 		res.redirect(`/`);
-			
-			
-			// res.render('joinCommunity',{msg:"incorrect details, enter correct details to join a community"});
+		// res.render('joinCommunity',{msg:"incorrect details, enter correct details to join a community"});
 	}
 	else{
-		res.redirect('/join');
+		res.render('joinCommunity',{msg:"Incorrect community name or password.Try again"});
 	}
 	
 }));
@@ -553,9 +556,22 @@ app.post('/create',isLoggedIn,catchAsync(async(req,res,next)=>{
 		password : req.body.password,
 		author : req.user._id
 	});
-	await community.save();
-	await req.user.save();
-	res.redirect(`/`);
+	const community1 = await Community.find({
+		'title' : req.body.title
+	});	
+	
+	if(community1.length == 0)
+		{
+			await community.save();
+			await req.user.save();
+			res.redirect(`/`);
+			
+		}
+	else{
+		res.render('createCommunity',{msg:`community already exists with ${req.body.title} name`});
+	}
+		
+	
 }));
 
 //leaving a community
